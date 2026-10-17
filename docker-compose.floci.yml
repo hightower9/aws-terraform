@@ -1,0 +1,37 @@
+# Floci — local AWS emulator (drop-in for LocalStack on :4566) + its web console.
+# Start with `make start-floci`; every environment can then be planned and
+# applied against it with EMULATOR=1 (see docs/GUIDE.md).
+#
+# Both ports are bound to 127.0.0.1: neither service has authentication and
+# the console can control every emulated resource.
+services:
+  floci:
+    image: floci/floci:2.1.0
+    container_name: floci
+    ports:
+      - "127.0.0.1:4566:4566"
+    volumes:
+      # EC2 RunInstances launches real containers via the host Docker daemon.
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./.floci:/app/data
+    environment:
+      FLOCI_STORAGE_MODE: hybrid
+      # The console runs as the floci-ui service below, pinned and started with
+      # the stack, instead of Floci's on-demand sidecar (same port 4500).
+      FLOCI_SERVICES_UI_ENABLED: "false"
+
+  # Web console: browse the VPC, EC2/ASG, S3, IAM, CloudWatch Logs... that
+  # Terraform created. Open http://localhost:4500
+  floci-ui:
+    image: floci/floci-ui:0.5.0
+    container_name: floci-ui
+    depends_on:
+      - floci
+    ports:
+      - "127.0.0.1:4500:4500"
+    environment:
+      FLOCI_ENDPOINT: http://floci:4566
+      AWS_ENDPOINT_URL: http://floci:4566
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test

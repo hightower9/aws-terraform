@@ -1,0 +1,4 @@
+# Keep LF everywhere: bash scripts, the Makefile and cloud-init break with CRLF.
+* text=auto eol=lf
+*.png binary
+*.jpg binary

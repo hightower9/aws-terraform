@@ -1,0 +1,5 @@
+# Where Terraform keeps this environment's state (S3, locked with a lockfile).
+# Create the bucket once: make bootstrap-state [EMULATOR=1]
+bucket = "laravel-tf-state-prod" # PLACEHOLDER: must be globally unique, e.g. laravel-tf-state-prod-<account-id>
+key    = "terraform.tfstate"
+region = "us-east-1"
