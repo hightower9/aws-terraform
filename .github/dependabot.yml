@@ -1,15 +1,21 @@
+# DISABLED: open-pull-requests-limit: 0 stops Dependabot from opening
+# version-update PRs. To turn it on, raise the limit (e.g. 5) on the
+# ecosystems you want. (Security alerts/updates are separate repo settings:
+# GitHub → Settings → Code security.)
 version: 2
 updates:
-  # Keep the GitHub Actions used by the (manual) workflow current.
+  # GitHub Actions used by the (manual) workflow.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 0
 
   # The AWS provider is declared once, in the root config (main.tf).
   - package-ecosystem: "terraform"
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 0
     commit-message:
       prefix: "deps(terraform)"
