@@ -1,0 +1,5 @@
+# Where Terraform keeps this environment's state (S3, locked with a lockfile).
+# Create the bucket once: make bootstrap-state [EMULATOR=1]
+bucket = "laravel-tf-state-dev" # change if taken: S3 names are global
+key    = "terraform.tfstate"
+region = "us-east-1"

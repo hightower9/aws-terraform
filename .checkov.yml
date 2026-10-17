@@ -1,0 +1,27 @@
+# Checkov config: used by `make security` and the CI Security Scan job.
+# Every skipped check is a deliberate, reviewed decision. Anything NOT listed
+# here fails the scan. Remove an entry when you adopt the hardening it
+# describes (see docs/PRODUCTION.md → "Optional hardening").
+framework:
+  - terraform
+skip-path:
+  - .terraform-envs
+  - .floci
+compact: true
+skip-check:
+  # --- Accepted by design ---
+  - CKV2_AWS_5    # SGs ARE attached (via launch template / ALB in other modules): cross-module false positive
+  - CKV_AWS_341   # IMDS hop limit 2 is required so the app container can use the instance role (S3, SSM)
+  - CKV2_AWS_34   # app_config "settings" are non-secret by design; secrets use SecureString
+  - CKV_AWS_2     # port-80 listener only redirects to HTTPS once acm_certificate_arn is set (HTTP-only is for local/dev)
+  - CKV_AWS_260   # port 80 open on the ALB solely for that HTTP->HTTPS redirect
+  - CKV_AWS_378   # TLS terminates at the ALB; ALB->instance hop stays inside the VPC on the app port
+
+  # --- Optional hardening, documented, not enabled by default (cost/complexity) ---
+  - CKV2_AWS_28   # WAF on the ALB (recommended for prod: attach an aws_wafv2_web_acl)
+  - CKV_AWS_91    # ALB access logs (needs a separate SSE-S3 bucket; the logs bucket uses KMS)
+  - CKV_AWS_158   # CloudWatch log groups use AWS-managed encryption, not a customer KMS key
+  - CKV_AWS_337   # SecureStrings use the AWS-managed aws/ssm key, not a customer KMS key
+  - CKV_AWS_338   # log retention is set per environment (log_retention_days), not fixed at 1 year
+  - CKV_AWS_144   # S3 cross-region replication (DR requirement, not needed by default)
+  - CKV2_AWS_62   # S3 event notifications (no consumer for them)

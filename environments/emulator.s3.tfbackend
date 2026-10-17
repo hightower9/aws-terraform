@@ -1,0 +1,14 @@
+# Layered on top of environments/<env>/backend.tfbackend when EMULATOR=1
+# (and always for local): keeps the same bucket/key but sends state to
+# Floci instead of real AWS. Run `make bootstrap-state EMULATOR=1` once.
+endpoints = {
+  s3  = "http://localhost:4566"
+  sts = "http://localhost:4566"
+  iam = "http://localhost:4566"
+}
+use_path_style              = true
+access_key                  = "test"
+secret_key                  = "test"
+skip_credentials_validation = true
+skip_requesting_account_id  = true
+skip_metadata_api_check     = true

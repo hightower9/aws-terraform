@@ -1,0 +1,15 @@
+version: 2
+updates:
+  # Keep the GitHub Actions used by the (manual) workflow current.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # The AWS provider is declared once, in the root config (main.tf).
+  - package-ecosystem: "terraform"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "deps(terraform)"

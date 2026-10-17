@@ -1,0 +1,38 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+tfplan-*
+.terraform/
+.terraform-*/
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Secret overlay files — Terraform auto-loads *.auto.tfvars in the env dirs.
+# Keep secrets in e.g. environments/dev/secrets.auto.tfvars (NOT committed).
+*.auto.tfvars
+*_secrets.tfvars
+
+# Per-environment Terraform working dirs + plan files (state itself is in S3)
+.terraform-envs/
+
+# Floci persisted data
+.floci/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
